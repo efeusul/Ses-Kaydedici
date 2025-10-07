@@ -11,23 +11,26 @@ print("Press 's' to start recording and 'q' to stop.") #Kullanıcının girişi 
 recording = [] #Ses parçalarını tutacak bir python listesi.Boş çünkü geldikçe bu listeye eklenecek.
 stream = None # sd.InputStream için bir yuvadır. None: kayıt edilmiyor/boş anlamında.
 
-
-##callback önemli. sounddevice bunu sıklıkla kısa parçalar halinde çağırır.
-##indata ses örneklerinin parçasını içeren Numpy dizisi. Şekil: (frames,channels)
-##frames parçadaki frame sayısı
-##time zamanlama bilgisi.
-##status alt ve üst limitleri veya diğer uyarıları gösterir.
-
+'''
+callback önemli. sounddevice bunu sıklıkla kısa parçalar halinde çağırır.
+indata ses örneklerinin parçasını içeren Numpy dizisi. Şekil: (frames,channels)
+frames parçadaki frame sayısı
+time zamanlama bilgisi.
+status alt ve üst limitleri veya diğer uyarıları gösterir.
+'''
 def callback(indata, frames, time, status):
     if status:
         print(status) # burada bir uyarı yazması gerekirse yazdır.
 
-    recording.append(indata.copy()) #dıştan içe doğru gidecek olursak: recording.append diyerek
-    #mikrofondan gelen ses parçalarını başta oluşturduğumuz boş listeye gönderiyoruz.
-    #indata sounddevice kütüphanesi tarafından yeniden kullanılan bir ara bellek olduğundan,
-    #copy() ile kalıcı bir kopyası oluşturulur,böylece daha sonra üzerine yazılmaz.
-    #hafıza aşımı durumunda recording listesi dolar ve kayıt işlemi sonlanır.
-    #hafızaya alınan verileri tek bir çatıda toplamak için de np.concatenate kullanılır.
+    recording.append(indata.copy())
+    '''
+    dıştan içe doğru gidecek olursak: recording.append diyerek
+    mikrofondan gelen ses parçalarını başta oluşturduğumuz boş listeye gönderiyoruz.
+    indata sounddevice kütüphanesi tarafından yeniden kullanılan bir ara bellek olduğundan,
+    copy() ile kalıcı bir kopyası oluşturulur,böylece daha sonra üzerine yazılmaz.
+    hafıza aşımı durumunda recording listesi dolar ve kayıt işlemi sonlanır.
+    hafızaya alınan verileri tek bir çatıda toplamak için de np.concatenate kullanılır.
+    '''
 
 while True:
     if keyboard.is_pressed("s") and stream is None: #Yalnız kayıt yapmıyorken kullanabilmek için.
